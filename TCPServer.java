@@ -120,9 +120,46 @@ class Connection extends Thread {
 				* CASO 3: Lista conteudo de diretório
 				*/
 				case "3":
-					System.out.println("Client escolheu caso: "+ data);
-			
-					out.writeUTF("\nServidor recebeu a escolha do client." + data);
+
+					DataInputStream listaDiretorioIn = new DataInputStream( clientSocket.getInputStream());
+
+					DataOutputStream listaDiretorioOut = new DataOutputStream( clientSocket.getOutputStream());
+
+					String caminhoListagem = listaDiretorioIn.readUTF();
+					
+					String directoryName = System.getProperty("user.dir");
+					
+					String	listaDiretorio = directoryName + "/" + caminhoListagem;
+					
+					File diretorioList = new File(listaDiretorio);
+
+					if (diretorioList.exists()) {
+            			
+						File lista[] = diretorioList.listFiles();
+
+						int tamDiretorio = lista.length;
+						
+						String listagem = "\n\ndiretório:  " + listaDiretorio + "\n";
+						
+						for(int i = 0; i < tamDiretorio; i++){
+							listagem = listagem + "\n" + lista[i].getName();
+	
+							// if(i == 3){
+							// 	listagem = listagem + "\n";
+							// }
+						}
+						
+						listagem = listagem + "\n";
+						
+						listaDiretorioOut.writeUTF(listagem);
+	
+        			} else {
+            			
+						listaDiretorioOut.writeUTF("\n diretorio " + listaDiretorio + " não existe.");
+
+        			}
+					
+
 
 				break;
 
