@@ -72,11 +72,21 @@ class Connection extends Thread {
 
 					DataOutputStream diretorioOut = new DataOutputStream( clientSocket.getOutputStream());
 					
-					data = diretorioIn.readUTF();
+					String caminho = diretorioIn.readUTF();
+					File diretorio = new File(caminho);
+					boolean checagem = diretorio.mkdir();
+					if (checagem) {
+            			
+						diretorioOut.writeUTF("\nServidor criou diretorio " + caminho);
+        			} else {
+            			
+						diretorioOut.writeUTF("\n diretorio " + caminho + " não criado.\n diretório existe.");
+        			}
 
-					System.out.println("Client enviou diretorio: "+ data);
+
+					// System.out.println("Client enviou diretorio: "+ data);
 			
-					diretorioOut.writeUTF("\nServidor criou diretorio " + data);
+
 					
 				break;
 				
@@ -84,9 +94,25 @@ class Connection extends Thread {
 				* CASO 2: Remove diretório.
 				*/
 				case "2":
-					System.out.println("Client escolheu caso: "+ data);
-			
-					out.writeUTF("\nServidor recebeu a escolha do client." + data);
+					
+					DataInputStream delDiretorioIn = new DataInputStream( clientSocket.getInputStream());
+
+					DataOutputStream delDiretorioOut = new DataOutputStream( clientSocket.getOutputStream());
+					
+					String caminhoDel = delDiretorioIn.readUTF();
+					File diretorioDel = new File(caminhoDel);
+
+					removerArquivos(diretorioDel);
+
+
+					if (!diretorioDel.exists()) {
+            			
+						delDiretorioOut.writeUTF("\nServidor deletou diretorio " + caminhoDel);
+
+        			} else {
+            			
+						delDiretorioOut.writeUTF("\n diretorio " + caminhoDel + " não deletado.\n diretório não existe.");
+        			}
 
 				break;
 
@@ -135,4 +161,14 @@ class Connection extends Thread {
 		
 
 	}
+
+	public void removerArquivos(File f) {
+     	if (f.isDirectory()) {
+			File[] files = f.listFiles();
+			for (File file : files) {
+				removerArquivos(file);
+			}
+     	}
+    	f.delete();
+  	}
 }
