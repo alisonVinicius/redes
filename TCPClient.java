@@ -15,7 +15,7 @@ public class TCPClient {
 
 		try{
 			
-			int     leitura;
+			String opcao;
 
 			// InetAddress aHost = ; InetAddress.getByName(InetAddress.getLocalHost().getHostName())
 			int serverPort = 7896;
@@ -34,53 +34,65 @@ public class TCPClient {
 				
 				// recolhe texto digitado pelo usuário. A própria mensagem.
 				leitor = new Scanner(System.in);
-				leitura = leitor.nextInt();
+				opcao = leitor.nextLine();
 				
+				DataInputStream opcaoIn = new DataInputStream( s.getInputStream());
 				
+				DataOutputStream opcaoOut =new DataOutputStream( s.getOutputStream());
+
+				opcaoOut.writeUTF(opcao);      	// UTF is a string encoding see Sn. 4.4
+				
+				String data = opcaoIn.readUTF();	    // read a line of data from the stream				
+
+				System.out.println("Received: "+ data) ; 
 
 
-				switch(leitura){
+				switch(opcao){
 					
 					
 					/**
 					 * CASO 1: cria um diretório.
 					 */
-					case 1:
+					case "1":
 						// bloco de código que será executado
 						System.out.println("digite o diretório que será criado:");
 						leitor = new Scanner(System.in);
 						String mensagem = leitor.nextLine();
+
+						DataInputStream diretorioIn = new DataInputStream( s.getInputStream());
 						
-						DataInputStream in = new DataInputStream( s.getInputStream());
-			
-						DataOutputStream out =new DataOutputStream( s.getOutputStream());
-		
-						out.writeUTF(mensagem);      	// UTF is a string encoding see Sn. 4.4
+						DataOutputStream diretorioOut =new DataOutputStream( s.getOutputStream());
+
+						diretorioOut.writeUTF(mensagem);      	// UTF is a string encoding see Sn. 4.4
 						
-						String data = in.readUTF();	    // read a line of data from the stream
-		
+						data = diretorioIn.readUTF();	    // read a line of data from the stream				
+
 						System.out.println("Received: "+ data) ; 
+						
+
+		
+
 						
 					break;
 					
 					/**
 					 * CASO 2: Remove diretório.
 					 */
-					case 2:
+					case "2":
 						// bloco de código que será executado
 					break;
 
 					/**
 					 * CASO 3: Lista conteudo de diretório
 					 */
-					case 3:
+					case "3":
 						// bloco de código que será executado
 					break;
 
 					/**
 					 * CASO 4: Envia arquivo.
 					 */
-					case 4:
+					case "4":
 						// bloco de código que será executado
 					break;
 					
@@ -88,7 +100,7 @@ public class TCPClient {
 					/**
 					 * CASO 5: Remover arquivo.
 					 */
-					case 5:
+					case "5":
 						// bloco de código que será executado
 					break;
 
