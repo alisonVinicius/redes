@@ -13,6 +13,8 @@ public class TCPClient {
 		// Scanner para ler os dados do usuário
 		Scanner leitor;
 
+		String mensagem;
+
 		try{
 			
 			String opcao;
@@ -57,7 +59,7 @@ public class TCPClient {
 						// bloco de código que será executado
 						System.out.println("digite o diretório que será criado:");
 						leitor = new Scanner(System.in);
-						String mensagem = leitor.nextLine();
+						mensagem = leitor.nextLine();
 
 						DataInputStream diretorioIn = new DataInputStream( s.getInputStream());
 						
@@ -79,7 +81,25 @@ public class TCPClient {
 					 * CASO 2: Remove diretório.
 					 */
 					case "2":
+
 						// bloco de código que será executado
+						System.out.println("digite o diretório que será deletado:");
+						leitor = new Scanner(System.in);
+						mensagem = leitor.nextLine();
+
+						DataInputStream delDiretorioIn = new DataInputStream( s.getInputStream());
+						
+						DataOutputStream delDiretorioOut =new DataOutputStream( s.getOutputStream());
+
+						delDiretorioOut.writeUTF(mensagem);      	// UTF is a string encoding see Sn. 4.4
+						
+						data = delDiretorioIn.readUTF();	    // read a line of data from the stream				
+
+						System.out.println("Received: "+ data) ; 
+						
+
+		
+
 					break;
 
 					/**
