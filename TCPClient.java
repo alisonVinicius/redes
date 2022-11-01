@@ -95,7 +95,7 @@ public class TCPClient {
 						
 						data = delDiretorioIn.readUTF();	    // read a line of data from the stream				
 
-						System.out.println("Received: "+ data) ; 
+						System.out.println(data); 
 						
 
 		
@@ -106,7 +106,45 @@ public class TCPClient {
 					 * CASO 3: Lista conteudo de diretório
 					 */
 					case "3":
+
 						// bloco de código que será executado
+						System.out.println("Digite o numero para selecionar a opcao e aperte enter:\n 1 - para listar o diretório desejado.\n 2 - para listar diretório atual.");
+						leitor = new Scanner(System.in);
+						mensagem = leitor.nextLine();
+
+						DataInputStream listaDiretorioIn = new DataInputStream( s.getInputStream());
+						
+						DataOutputStream listaDiretorioOut =new DataOutputStream( s.getOutputStream());
+
+						switch(mensagem){
+							case "1":
+								System.out.println("digite o diretório que deseja acessar:");
+								leitor = new Scanner(System.in);
+								String diretorio = leitor.nextLine();
+	
+								listaDiretorioOut.writeUTF(diretorio);      	// UTF is a string encoding see Sn. 4.4
+							
+								data = listaDiretorioIn.readUTF();	    // read a line of data from the stream				
+		
+								System.out.println(data) ; 
+							
+							break;
+							
+							default:
+						
+								listaDiretorioOut.writeUTF("");      	// UTF is a string encoding see Sn. 4.4
+								
+								data = listaDiretorioIn.readUTF();	    // read a line of data from the stream				
+		
+								System.out.println(data) ; 
+						
+							break;
+						}
+
+						
+
+
+
 					break;
 
 					/**
