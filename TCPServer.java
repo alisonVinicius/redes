@@ -167,9 +167,74 @@ class Connection extends Thread {
 				* CASO 4: Envia arquivo.
 				*/
 				case "4":
-					System.out.println("Client escolheu caso: "+ data);
-			
-					out.writeUTF("\nServidor recebeu a escolha do client." + data);
+					try{
+						DataInputStream NomeArquivoIn = new DataInputStream( clientSocket.getInputStream());
+						DataInputStream tamArquivoIn = new DataInputStream(clientSocket.getInputStream());
+						ObjectInputStream   entrada = new ObjectInputStream(clientSocket.getInputStream());
+						
+						
+						String nomeDoArquivo = (String)entrada.readObject();
+						
+						// String nomeDoArquivo = NomeArquivoIn.readUTF();
+						int       tamArquivo =  tamArquivoIn.readInt();  
+	
+	
+						byte [] byteArray = new byte[tamArquivo];
+	
+						//Leitura do arquivo solicitado
+						FileInputStream ArquivoInputFile = new FileInputStream(nomeDoArquivo);
+	
+						//DataInputStream para processar o arquivo solicitado
+						DataInputStream arquivo = new DataInputStream(ArquivoInputFile);
+	
+						DataOutputStream saida  = new DataOutputStream(clientSocket.getOutputStream());
+	
+						saida.flush();
+	
+						int leitura = arquivo.read(byteArray);
+	
+						while(leitura != - 1) {
+							if(leitura != - 2) {
+							  saida.write(byteArray,0,leitura);
+							}
+							leitura = arquivo.read(byteArray);
+						}
+	
+	
+						entrada.close();
+						saida.close();
+						
+	
+	
+					}
+					catch(Exception ec) {}
+
+
+
+
+
+
+					// InputStream EntradaS = clientSocket.getInputStream();
+
+					// FileOutputStream ArquivoOut = new FileOutputStream(nomeDoArquivo);
+
+					// BufferedOutputStream BufferArquivoOut = new BufferedOutputStream(ArquivoOut);
+
+					// int lerBytes = EntradaS.read(byteArray,0,byteArray.length);
+
+					// int intervaloByteArray = lerBytes;
+
+					// do {
+					// 	lerBytes = EntradaS.read(byteArray, intervaloByteArray, (byteArray.length-intervaloByteArray));
+					// 	if(lerBytes >= 0) intervaloByteArray += lerBytes;
+					//  } while(lerBytes > -1);
+
+
+					// BufferArquivoOut.write(byteArray, 0 , intervaloByteArray);
+
+					// BufferArquivoOut.close();
+
+
 
 				break;
 				
@@ -178,9 +243,9 @@ class Connection extends Thread {
 				* CASO 5: Remover arquivo.
 				*/
 				case "5":
-					System.out.println("Client escolheu caso: "+ data);
-			
-					out.writeUTF("\nServidor recebeu a escolha do client." + data);
+
+
+					
 				break;
 
 				default:
