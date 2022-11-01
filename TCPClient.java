@@ -151,6 +151,48 @@ public class TCPClient {
 					 * CASO 4: Envia arquivo.
 					 */
 					case "4":
+						
+						DataOutputStream nomeArquivoOut = new DataOutputStream( s.getOutputStream());
+						
+						DataOutputStream tamArquivoOut = new DataOutputStream( s.getOutputStream());
+
+
+						String nomeArquivo;
+
+						System.out.println("Digite o nome do arquivo: ");
+						leitor = new Scanner(System.in);
+						nomeArquivo = leitor.nextLine();
+						
+						nomeArquivoOut.writeUTF(nomeArquivo);
+
+						File arquivo = new File(nomeArquivo);
+						
+						
+
+
+						byte [] mybytearray  = new byte [(int)arquivo.length()];
+
+						tamArquivoOut.writeInt((int)mybytearray.length);
+
+						FileInputStream ArquivoIn = new FileInputStream(arquivo);
+
+						BufferedInputStream BufferArquivoIn = new BufferedInputStream(ArquivoIn);
+
+						BufferArquivoIn.read(mybytearray,0,mybytearray.length);
+
+						OutputStream SaidaArquivo = s.getOutputStream();
+
+						SaidaArquivo.write(mybytearray, 0, mybytearray.length);
+
+						SaidaArquivo.flush();
+
+
+
+						
+
+						
+
+						
 						// bloco de código que será executado
 					break;
 					
